@@ -68,28 +68,8 @@
         }
         
         .pokemon {
+            width: 14%;
             margin: 0px 1%;
-        }
-        
-        .hierba {
-            background-repeat: no-repeat;
-            background-size: cover;
-            border: 5px green solid;
-            background: rgba(124, 185, 54, 0.5);
-        }
-        
-        .agua {
-            background-repeat: no-repeat;
-            background-size: cover;
-            border: 5px blue solid;
-            background: rgba(71, 200, 204, 0.5);
-        }
-        
-        .fuego {
-            background-repeat: no-repeat;
-            background-size: cover;
-            border: 5px red solid;
-            background: rgba(202, 51, 14, 0.5);
         }
         
         b {
@@ -138,13 +118,13 @@
         }
         
         .habilidades {
-            margin-left: 49%;
-            bottom: 20%;
+            margin-left: 50%;
+            bottom: 50%;
             width: 50%;
             height: 30%;
             position: relative;
             border: black 4px solid;
-            background: rgba(30, 202, 14, 0.459);
+            background: rgb(197, 178, 159);
         }
         
         .pokeingmae {
@@ -152,7 +132,7 @@
             height: 80%;
             position: relative;
             border: black 0px solid;
-            top: 11%;
+            bottom: 10%;
             left: 1%;
         }
         
@@ -163,6 +143,7 @@
         }
         
         .supokemon {
+            margin-top: -5%;
             position: relative;
             height: 100%;
             border: blue 0px solid;
@@ -180,22 +161,56 @@
         }
         
         .head_juego {
-            margin-left: 0%;
+            top: 20%;
+            margin-left: 10%;
             width: 100%;
             position: relative;
-            height: 9%;
+            height: 30%;
             border: blue 0px solid;
         }
         
+        .head_juego2 {
+            bottom: 22%;
+            margin-left: 65%;
+            width: 100%;
+            position: relative;
+            height: 0%;
+            border: blue 0px solid;
+        }
+        
+        .su_Barra_vida {
+            width: 25%;
+            position: relative;
+            margin-top: 0%;
+        }
+        
+        .nom_pokemonseleccionat_seu {
+            position: relative;
+            margin-top: %;
+        }
+        
+        .su_Barra_mana {
+            width: 25%;
+        }
+        
+        .tu_Barra_vida {
+            width: 30%;
+        }
+        
+        .tu_Barra_mana {
+            margin-top: 2%;
+            width: 30%;
+        }
+        
         .miniaturas {
-            width: 10%;
+            width: 100%;
         }
         
         .caja_miniaturas {
             background: rgba(0, 0, 0, 0.459);
             position: relative;
-            width: 10px;
-            height: 100%;
+            width: 40%;
+            height: 10%;
             margin-left: 0%;
         }
         
@@ -206,14 +221,44 @@
             height: 100%;
             margin-left: 4%;
         }
+        
+        .boton_ataque {
+            margin-left: 24px !important;
+            height: 92% !important;
+            position: relative;
+            font-size: 25px;
+            text-align: center;
+            margin: 5px;
+            background: rgba(153, 216, 145, 0.815);
+            border: 0px black solid;
+            border-radius: 20px;
+        }
+        
+        .nombrepokemon {
+            margin-left: 2%;
+            margin-bottom: 1%;
+            background: rgba(153, 216, 145, 0.815);
+            border: 1px solid black;
+            width: 20%;
+            text-align: center;
+        }
+        
+        .list {
+            position: relative;
+            width: 100%;
+            height: 50%;
+        }
     </style>
+    <link rel="stylesheet" href="tipos.css">
+    <link rel="stylesheet" href="general.css">
+    <script src="functions.js"></script>
 </head>
 
-<body style="background-image: url('fondo.jpg');">
+<body style="background-image: url('índice.jpg'); background-size: cover">
 
     <h1 id="paginatitulo"><b>Pokemon!</b></h1>
 
-    <div style="display:block;" class="container visible">
+    <div id="selec_pokemon" style="display:block;" class="container visible">
         <div id="header" class="row">
             <div class="col">
                 Pokemones en linea
@@ -223,20 +268,29 @@
             </div>
         </div>
         <div id="contenido1" class="row">
-            <div id="arena" class="col">
+            <div id="arena" class="col ">
                 <div id="tituloarena" class="row">
                     <B>Tria un Pokemon</B>
 
                 </div>
-                <div id="pokemons_Triar" class="row justify-content-md-center h-60">
-                    <div id="bulbasur" class="col col-lg-2 square hierba pokemon">
-                        <img class="w-100   h-100 p-3" src="bulbasaur.png">
+                <div id="pokemons_Triar" class="row justify-content-center  h-60">
+                    <div id="c1" class="col col-lg-2 square pokemon">
+                        <img id="p1" class="w-100  h-100 p-3" src="">
                     </div>
-                    <div id="agua" class="col col-lg-2 square agua pokemon">
-                        <img class="w-100  h-100 p-3" src="Squirtle.png">
+                    <div id="c2" class="col col-lg-2 square pokemon">
+                        <img id="p2" class="w-100  h-100 p-3" src="">
                     </div>
-                    <div id="fuego" class="col col-lg-2 square fuego pokemon">
-                        <img class="w-100 h-100 p-3" src="charmaner.png">
+                    <div id="c3" class="col col-lg-2 square pokemon">
+                        <img id="p3" class="w-100 h-100 p-3" src="">
+                    </div>
+                    <div id="c4" class="col col-lg-2 square  pokemon">
+                        <img id="p4" class="w-100 h-100 p-3" src="">
+                    </div>
+                    <div id="c5" class="col col-lg-2 square pokemon">
+                        <img id="p5" class="w-100 h-100 p-3" src="">
+                    </div>
+                    <div id="c6" class="col col-lg-2 square pokemon">
+                        <img id="p6" class=" w-100 h-100 p-3" src="">
                     </div>
                 </div>
 
@@ -256,7 +310,7 @@
                                 <b>Crear Sala</b><button>+</button>
                             </div>
                             <div class="col-2 sala">
-                                <b> Sala Exemple [ 0 / 0]</b><button>+</button>
+                                <b> Sala Exemple [ 0 / 0]</b><button onclick="jugar()">+</button>
                             </div>
                             <div class="col-2 sala">
                                 <b> Sala Exemple [ 0 / 0]</b><button>+</button>
@@ -284,31 +338,56 @@
 
     </div>
 
-    <div style="display:block;" class="container ">
+    <div id="ingame" style="display:block;" class="container ">
         <div class="arena">
-            <div class="row head_juego">
-                <div class="col caja_miniaturas">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/144.png">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/143.png">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png">
-                </div>
-                <div class="col caja_miniaturas2">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/144.png">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/143.png">
-                    <img class="miniaturas" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png">
-                </div>
+            <div class="row caja_miniaturas">
+                <div id="conten_0" class="col"><img id="m1" class="miniaturas" src=""></div>
+                <div id="conten_1" class="col"><img id="m2" class="miniaturas" src=""></div>
+                <div id="conten_2" class="col"><img id="m3" class="miniaturas" src=""></div>
+                <div id="conten_3" class="col"><img id="m4" class="miniaturas" src=""></div>
+                <div id="conten_4" class="col"><img id="m5" class="miniaturas" src=""></div>
+                <div id="conten_5" class="col"><img id="m6" class="miniaturas" src=""></div>
             </div>
-            <div class="pokeingmae row">
-                <div class="col tupokemon">
-                    <img class="tamaño1" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/144.png">
+            <div class="head_juego">
+                <div id="nom_pokemonseleccionat_teu" class="row nombrepokemon"><b>Articuno lvl 60</b></div>
+                <div class=" row tu_Barra_vida progress">
+                    <div ID="tu_vida" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="5" aria-valuemin="10" aria-valuemax="0" style="width:100%">150</div>
                 </div>
-                <div class="col supokemon">
-                    <img class="tamaño2" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/143.png">
-                </div>
-            </div>
-            <div class="row habilidades">
 
             </div>
+            <div class="head_juego2">
+                <div id="nom_pokemonseleccionat_seu" class="row nombrepokemon"><b>Snorlax lvl 60</b></div>
+                <div class=" row su_Barra_vida progress">
+                    <div id="su_vida" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="5" aria-valuemin="10" aria-valuemax="0" style="width:300">200</div>
+                </div>
+
+            </div>
+
+
+            <div class="pokeingmae row">
+                <div class="col tupokemon">
+                    <img id="pokemonseleccionat_1" class="tamaño1" src="">
+                </div>
+                <div class="col supokemon">
+                    <img id="pokemonseleccionat_2" class="tamaño2" src="">
+                </div>
+            </div>
+            <div style="display:block;" class="row habilidades justify-content-md-center ">
+                <div class="row list">
+                    <div id="h1"></div>
+                    <div id="h2"></div>
+                </div>
+                <div class="row list">
+                    <div onclick="atacar()" id="h3"></div>
+                    <div id="h4"></div>
+                </div>
+            </div>
+            <div style="display:none;" class="row habilidades justify-content-md-center ">
+                <div class="row ">
+
+                </div>
+            </div>
+
         </div>
     </div>
 
