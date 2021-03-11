@@ -91,7 +91,7 @@ function mostrarpokemons(pokemons_randoms) {
 function sethabilidades() {
 
     for (let i = 0; i <= habilidades.length - 1; i++) {
-        console.log(habilidades.length);
+
         var button = document.createElement("button");
         button.innerHTML = habilidades[i].nombre;
         button.style.background = "rgb(0,0,0,0)";
@@ -141,18 +141,26 @@ function atacar(event) {
 
     document.getElementById("skillsbars").style.display = "none";
     document.getElementById("text_combat").style.display = "block";
-    console.log(event.explicitOriginalTarget.id.substring(1, 2));
     let idSkill = event.explicitOriginalTarget.id.substring(1, 2);
+    let pred = document.getElementById("pokemonseleccionat_1").style.right
+    let pred2 = document.getElementById("pokemonseleccionat_1").style.zIndex;
+    let pred3 = document.getElementById("pokemonseleccionat_1").style.top;
+    console.log(pred);
+    document.getElementById("pokemonseleccionat_1").style.position = "relative";
+
     document.getElementById("text_combat").textContent = "has utilizado " + habilidades[idSkill].nombre;
+    setTimeout(function() {
+        document.getElementById("pokemonseleccionat_1").style.zIndex = "1";
+        document.getElementById("pokemonseleccionat_1").style.left = "80%";
+        document.getElementById("pokemonseleccionat_1").style.top = "-20%";
+        setTimeout(function() {
+            document.getElementById("pokemonseleccionat_1").style.left = pred;
+            document.getElementById("pokemonseleccionat_1").style.top = pred3;
+            document.getElementById("pokemonseleccionat_1").style.zIndex = pred2;
+        }, 200);
+    }, 200);
     setTimeout(function() {
         document.getElementById("skillsbars").style.display = "block";
         document.getElementById("text_combat").style.display = "none";
-    }, 2000);
-    daño();
-}
-
-function daño() {
-    document.getElementById("subarravia");
-
-
+    }, 1000);
 }
