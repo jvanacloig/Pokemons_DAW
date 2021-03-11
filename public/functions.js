@@ -171,7 +171,7 @@ function atacar(event) {
 }
 
 function nextpokemon() {
-    document.getElementById("pokemonseleccionat_1").style.opacity = "1";
+
     for (let i = 0; 1 <= pokemons_randoms.length; i++) {
         if (pokemons_randoms[i].src_back == document.getElementById("pokemonseleccionat_1").src) {
             document.getElementById("tu_vida").textContent = pokemons_randoms[i + 1].vida;
