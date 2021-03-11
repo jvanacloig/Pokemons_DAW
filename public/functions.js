@@ -141,5 +141,8 @@ function atacar() {
     console.log("skill");
     document.getElementById("skillsbars").style.display = "none";
     document.getElementById("text_combat").style.display = "block";
-
+    setTimeout(function() {
+        document.getElementById("skillsbars").style.display = "block";
+        document.getElementById("text_combat").style.display = "none";
+    }, 2000);
 }
