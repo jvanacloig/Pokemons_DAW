@@ -136,3 +136,10 @@ function esconder_habilidades() {
 
 
 }
+
+function atacar() {
+    console.log("skill");
+    document.getElementById("skillsbars").style.display = "none";
+    document.getElementById("text_combat").style.display = "block";
+
+}
