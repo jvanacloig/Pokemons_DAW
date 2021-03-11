@@ -25,7 +25,7 @@ var habilidades = [{
 }];
 var pokemons_randoms = [{
     id: "0",
-    vida: "100",
+    vida: "340",
     nombre: "Snorlax",
     tipo1: "normal",
     tipo2: "",
@@ -33,7 +33,7 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/143.png"
 }, {
     id: "1",
-    vida: "100",
+    vida: "280",
     nombre: "Golem",
     tipo1: "rock",
     tipo2: "",
@@ -41,7 +41,7 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/76.png"
 }, {
     id: "2",
-    vida: "100",
+    vida: "230",
     nombre: "articuno",
     tipo1: "ice",
     tipo2: "",
@@ -49,7 +49,7 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/144.png"
 }, {
     id: "3",
-    vida: "100",
+    vida: "300",
     nombre: "dragonite",
     tipo1: "dragon",
     tipo2: "",
@@ -57,7 +57,7 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/149.png"
 }, {
     id: "4",
-    vida: "100",
+    vida: "130",
     nombre: "Hitmonlee",
     tipo1: "fight",
     tipo2: "",
@@ -65,12 +65,12 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/106.png"
 }, {
     id: "5",
-    vida: "100",
+    vida: "120",
     nombre: "Gengar",
     tipo1: "ghost",
     tipo2: "",
     src_front: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/94.png",
-    src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/back/94.png"
+    src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/94.png"
 }, ];
 window.onload = function() {
     cargarinici();
@@ -145,22 +145,68 @@ function atacar(event) {
     let pred = document.getElementById("pokemonseleccionat_1").style.right
     let pred2 = document.getElementById("pokemonseleccionat_1").style.zIndex;
     let pred3 = document.getElementById("pokemonseleccionat_1").style.top;
+    let widthpo = document.getElementById("pokemonseleccionat_1").style.width;
     console.log(pred);
     document.getElementById("pokemonseleccionat_1").style.position = "relative";
 
     document.getElementById("text_combat").textContent = "has utilizado " + habilidades[idSkill].nombre;
     setTimeout(function() {
+        document.getElementById("pokemonseleccionat_1").style.width = "450px";
         document.getElementById("pokemonseleccionat_1").style.zIndex = "1";
-        document.getElementById("pokemonseleccionat_1").style.left = "80%";
-        document.getElementById("pokemonseleccionat_1").style.top = "-20%";
+        document.getElementById("pokemonseleccionat_1").style.left = "30%";
+        document.getElementById("pokemonseleccionat_1").style.top = "-5%";
+
         setTimeout(function() {
             document.getElementById("pokemonseleccionat_1").style.left = pred;
             document.getElementById("pokemonseleccionat_1").style.top = pred3;
             document.getElementById("pokemonseleccionat_1").style.zIndex = pred2;
+            document.getElementById("pokemonseleccionat_1").style.width = widthpo;
         }, 200);
     }, 200);
     setTimeout(function() {
         document.getElementById("skillsbars").style.display = "block";
         document.getElementById("text_combat").style.display = "none";
     }, 1000);
+
+}
+
+function nextpokemon() {
+    document.getElementById("pokemonseleccionat_1").style.opacity = "1";
+    for (let i = 0; 1 <= pokemons_randoms.length; i++) {
+        if (pokemons_randoms[i].src_back == document.getElementById("pokemonseleccionat_1").src) {
+            document.getElementById("tu_vida").textContent = pokemons_randoms[i + 1].vida;
+            document.getElementById("nom_pokemonseleccionat_teu").textContent = pokemons_randoms[i + 1].nombre;
+            document.getElementById("pokemonseleccionat_1").src = pokemons_randoms[i + 1].src_back;
+            document.getElementById("pokemonseleccionat_1").style.opacity = "1";
+            let t = document.getElementById("conten_" + pokemons_randoms[i].id);
+            t.style.border = "0px white solid";
+            t.style.opacity = "0.5";
+            t = document.getElementById("conten_" + pokemons_randoms[i + 1].id);
+            t.style.border = "3px white solid";
+            break;
+        }
+    }
+
+}
+
+function morision() {
+    document.getElementById("pokemonseleccionat_1").style = ".grayscale { filter: grayscale(100%); }";
+    setTimeout(function() {
+        document.getElementById("pokemonseleccionat_1").style.opacity = "0.8";
+
+        setTimeout(function() {
+            document.getElementById("pokemonseleccionat_1").style.opacity = "0.6";
+            setTimeout(function() {
+                document.getElementById("pokemonseleccionat_1").style.opacity = "0.4";
+                setTimeout(function() {
+                    document.getElementById("pokemonseleccionat_1").style.opacity = "0.2";
+                    setTimeout(function() {
+                        document.getElementById("pokemonseleccionat_1").style.opacity = "0";
+                        nextpokemon();
+                    }, 100);
+                }, 100);
+            }, 100);
+        }, 100);
+    }, 100);
+
 }
