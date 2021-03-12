@@ -155,12 +155,13 @@ function atacar(event) {
         document.getElementById("pokemonseleccionat_1").style.zIndex = "1";
         document.getElementById("pokemonseleccionat_1").style.left = "30%";
         document.getElementById("pokemonseleccionat_1").style.top = "-5%";
-
+        enemigodañado();
         setTimeout(function() {
             document.getElementById("pokemonseleccionat_1").style.left = pred;
             document.getElementById("pokemonseleccionat_1").style.top = pred3;
             document.getElementById("pokemonseleccionat_1").style.zIndex = pred2;
             document.getElementById("pokemonseleccionat_1").style.width = widthpo;
+
         }, 200);
     }, 200);
     setTimeout(function() {
@@ -170,6 +171,22 @@ function atacar(event) {
 
 }
 
+function enemigodañado() {
+    document.getElementById("pokemonseleccionat_2").style.position = "relative";
+    let pred3 = document.getElementById("pokemonseleccionat_2").style.top;
+    let widthpo = document.getElementById("pokemonseleccionat_2").style.width;
+    setTimeout(function() {
+        document.getElementById("pokemonseleccionat_2").style.width = "300px";
+
+        document.getElementById("pokemonseleccionat_2").style.filter = "invert(100%)";
+        setTimeout(function() {
+            document.getElementById("pokemonseleccionat_2").style.top = pred3;
+            document.getElementById("pokemonseleccionat_2").style.width = widthpo;
+            document.getElementById("pokemonseleccionat_2").style.filter = "invert(0%)";
+        }, 100);
+    }, 100);
+}
+
 function nextpokemon() {
 
     for (let i = 0; 1 <= pokemons_randoms.length; i++) {
@@ -177,10 +194,10 @@ function nextpokemon() {
             document.getElementById("tu_vida").textContent = pokemons_randoms[i + 1].vida;
             document.getElementById("nom_pokemonseleccionat_teu").textContent = pokemons_randoms[i + 1].nombre;
             document.getElementById("pokemonseleccionat_1").src = pokemons_randoms[i + 1].src_back;
-            document.getElementById("pokemonseleccionat_1").style.opacity = "1";
             let t = document.getElementById("conten_" + pokemons_randoms[i].id);
             t.style.border = "0px white solid";
             t.style.opacity = "0.5";
+            document.getElementById("pokemonseleccionat_1").style.opacity = "1";
             t = document.getElementById("conten_" + pokemons_randoms[i + 1].id);
             t.style.border = "3px white solid";
             break;
