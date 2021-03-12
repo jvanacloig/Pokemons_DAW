@@ -235,11 +235,9 @@ function morision() {
             }, 100);
         }, 100);
     }, 100);
-
 }
 
 function finjuego() {
 
-    document.getElementById("selec_pokemon").style.display = "block";
-    document.getElementById("ingame").style.display = "none";
+    location.reload();
 }
