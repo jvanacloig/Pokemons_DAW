@@ -132,11 +132,6 @@ function colocarpokemons_combat(pokemons_randoms) {
     console.log("x");
 }
 
-function esconder_habilidades() {
-
-
-}
-
 function atacar(event) {
 
     document.getElementById("skillsbars").style.display = "none";
@@ -177,7 +172,6 @@ function enemigodañado() {
     let widthpo = document.getElementById("pokemonseleccionat_2").style.width;
     setTimeout(function() {
         document.getElementById("pokemonseleccionat_2").style.width = "300px";
-
         document.getElementById("pokemonseleccionat_2").style.filter = "invert(100%)";
         setTimeout(function() {
             document.getElementById("pokemonseleccionat_2").style.top = pred3;
@@ -205,15 +199,12 @@ function nextpokemon() {
                 t.style.opacity = "0.5";
                 document.getElementById("pokemonseleccionat_1").style.opacity = "1";
                 t = document.getElementById("conten_" + pokemons_randoms[i + 1].id);
-
                 t.style.border = "3px white solid";
-
                 console.log(e);
                 break;
             }
         }
     }
-
 }
 
 function morision() {
