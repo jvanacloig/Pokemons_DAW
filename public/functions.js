@@ -188,19 +188,29 @@ function enemigodañado() {
 }
 
 function nextpokemon() {
-
-    for (let i = 0; 1 <= pokemons_randoms.length; i++) {
-        if (pokemons_randoms[i].src_back == document.getElementById("pokemonseleccionat_1").src) {
-            document.getElementById("tu_vida").textContent = pokemons_randoms[i + 1].vida;
-            document.getElementById("nom_pokemonseleccionat_teu").textContent = pokemons_randoms[i + 1].nombre;
-            document.getElementById("pokemonseleccionat_1").src = pokemons_randoms[i + 1].src_back;
-            let t = document.getElementById("conten_" + pokemons_randoms[i].id);
-            t.style.border = "0px white solid";
-            t.style.opacity = "0.5";
-            document.getElementById("pokemonseleccionat_1").style.opacity = "1";
-            t = document.getElementById("conten_" + pokemons_randoms[i + 1].id);
-            t.style.border = "3px white solid";
+    var e = pokemons_randoms.length;
+    for (let i = 0; 1 <= pokemons_randoms.length + 1; i++) {
+        e = e - 1;
+        if (e <= 0) {
+            console.log("hola");
+            finjuego();
             break;
+        } else {
+            if (pokemons_randoms[i].src_back == document.getElementById("pokemonseleccionat_1").src) {
+                document.getElementById("tu_vida").textContent = pokemons_randoms[i + 1].vida;
+                document.getElementById("nom_pokemonseleccionat_teu").textContent = pokemons_randoms[i + 1].nombre;
+                document.getElementById("pokemonseleccionat_1").src = pokemons_randoms[i + 1].src_back;
+                let t = document.getElementById("conten_" + pokemons_randoms[i].id);
+                t.style.border = "0px white solid";
+                t.style.opacity = "0.5";
+                document.getElementById("pokemonseleccionat_1").style.opacity = "1";
+                t = document.getElementById("conten_" + pokemons_randoms[i + 1].id);
+
+                t.style.border = "3px white solid";
+
+                console.log(e);
+                break;
+            }
         }
     }
 
@@ -226,4 +236,10 @@ function morision() {
         }, 100);
     }, 100);
 
+}
+
+function finjuego() {
+
+    document.getElementById("selec_pokemon").style.display = "block";
+    document.getElementById("ingame").style.display = "none";
 }
