@@ -43,7 +43,7 @@ var maxPokemons = 151;
 
 app.use(express.static('public'));
 
-io.on('Conectar', function(socket) {
+io.on('connection', function(socket) {
     console.log('Client connected');
     let pokemons = GetRandomPokemons();
     Enviar('PokemonsRandom', pokemons);

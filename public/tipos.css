@@ -1,0 +1,142 @@
+.grass {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(52, 149, 34);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.water {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgba(107, 141, 222, 255);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.fire {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(226, 83, 0);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.rock {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(73, 25, 3);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.bug {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(170, 228, 162);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.siniestro {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(143, 47, 130);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.dragon {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(100, 28, 160);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.electr {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(255, 210, 11);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.ghost {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(35, 5, 59);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.ice {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(40, 228, 212);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.fight {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(202, 0, 0);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.normal {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(238, 204, 173);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.psiquico {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(255, 175, 244);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.ground {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(158, 98, 42);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.poison {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(223, 0, 204);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.flying {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(137, 129, 172);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
