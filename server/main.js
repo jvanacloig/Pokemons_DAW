@@ -1,4 +1,5 @@
 var express = require('express');
+//const Player = require('./DataTypes/Player');
 const pokemon = require("./DataTypes/Pokemon");
 const room = require("./DataTypes/Room");
 const stats = require("./DataTypes/Stats");
@@ -6,13 +7,47 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var messages = [{
-    id: 1,
-    text: "Hola soy un mensaje",
-    author: "Carles"
-}];
+const Player = {
+    name: "",
+    pokemons: [],
+    socket: "",
+
+    Player: function(name, pokemons, socket) {
+        this.name = name;
+        this.pokemons = pokemons;
+        this.socket = socket;
+    },
 
 
+    PlayerToJson: function() {
+        return [{
+            Name: this.name,
+            Pokemons: this.pokemons
+        }];
+    }
+};
+
+const Pokemon = {
+    Nombre: "",
+    Tipo1: "",
+    Tipo2: "",
+    Hablilidades: "",
+    url: "",
+    stats: "",
+
+    Pokemon: function(Nombre, Tipo1, Tipo2, Hablilidades, url, stats) {
+        this.Nombre = Nombre;
+        this.Tipo1 = Tipo1;
+        this.Tipo2 = Tipo2;
+        this.Hablilidades = Hablilidades;
+        this.url = url;
+        this.stats = stats;
+    },
+
+    PokemonToJson: function() {
+
+    }
+}
 
 
 // var Pokemon = [{
@@ -56,9 +91,13 @@ app.get('/hello', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+
     console.log('Client connected');
     let pokemons = GetRandomPokemons();
-    Enviar('PokemonsRandom', pokemons);
+    let player = Object.create(Player);
+    player.Player("a", pokemons, socket);
+    console.log(player.PlayerToJson());
+    Enviar('PokemonsRandom', player.PlayerToJson(), socket);
 
     socket.on('PokemonsRandomOK', function() {
         Console.log('PokemonsRandomOK')
@@ -69,6 +108,10 @@ io.on('connection', function(socket) {
         Enviar('Sales', rooms);
     });
 
+});
+
+server.listen(25001, function() {
+    console.log("Servidor corriendo en http://172.24.3.178:25001");
 });
 
 
@@ -117,7 +160,11 @@ function GetRandomPokemons() {
             )
         }
     }
-    return pokemons;
+    pokemons_enviar = [];
+    // pokemons.forEach(pokemon => {
+    //     pokemon.P
+    // });
+    return pokemons_enviar;
 };
 
 function GetRandomPokemon(numPokemons) {
@@ -151,7 +198,3 @@ function GetApiData(url) {
             console.log('Fetch Error :-S', err);
         });
 }
-
-server.listen(25001, function() {
-    console.log("Servidor corriendo en http://172.24.3.178:25001");
-});
