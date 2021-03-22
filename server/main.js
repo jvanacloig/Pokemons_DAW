@@ -7,6 +7,9 @@ const room = require("./DataTypes/Room");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+const fetch = require('node-fetch');
+var Pokedex = require('pokedex-promise-v2');
+var P = new Pokedex();
 
 const Player = {
     name: "",
@@ -21,10 +24,15 @@ const Player = {
 
 
     ToJson: function() {
-        return [{
+        let out = [{
             Name: this.name,
-            Pokemons: this.pokemons
+            Pokemons: []
         }];
+        for (let i = 0; i < this.pokemons.length; i++) {
+            out[0].Pokemons[i] = this.pokemons[i].ToJson();
+            console.log(this.pokemons[i].ToJson());
+        }
+        return out;
     }
 };
 
@@ -131,10 +139,11 @@ io.on('connection', function(socket) {
 
     console.log('Client connected');
     let pokemons = GetRandomPokemons();
+    console.log(pokemons);
     let player = Object.create(Player);
     player.Player("a", pokemons, socket);
     console.log(player.ToJson());
-    Enviar('PokemonsRandom', player.PlayerToJson(), socket);
+    Enviar('PokemonsRandom', player.ToJson(), socket);
 
     socket.on('PokemonsRandomOK', function() {
         Console.log('PokemonsRandomOK')
@@ -148,7 +157,7 @@ io.on('connection', function(socket) {
 });
 
 server.listen(25001, function() {
-    console.log("Servidor corriendo en http://172.24.3.178:25001");
+    console.log("Servidor corriendo en http://192.168.18.5:25001");
 });
 
 
@@ -182,7 +191,7 @@ function GetRandomPokemons() {
                 pokemonData.types[1],
                 pokemonData.moves,
                 url,
-                stats
+                stats.ToJson()
             )
         } else {
             pokemons[i] = Object.create(Pokemon);
@@ -199,7 +208,7 @@ function GetRandomPokemons() {
                 pokemonData.types[0],
                 pokemonData.moves,
                 url,
-                stats
+                stats.ToJson()
             )
         }
     }
@@ -212,32 +221,59 @@ function GetRandomPokemons() {
 
 function GetRandomPokemon(numPokemons) {
     let find = false;
+    let num;
     while (!find) {
-        let num = Math.floor(Math.random() * maxPokemons);
-        if (!numPokemons[numPokemons.indexOf(num)] == num) {
-            trobat = true;
-            return num;
+        num = Math.floor(Math.random() * maxPokemons);
+        if (!(numPokemons[numPokemons.indexOf(num)] == num)) {
+            find = true;
         }
     }
+    return num;
 };
 
 function GetApiData(url) {
-    fetch(url)
-        .then(
-            function(response) {
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
+    // let retorn;
+    // console.log(url);
+    // fetch(url)
+    //     .then(
+    //         function(response) {
+    //             if (response.status !== 200) {
+    //                 console.log('Looks like there was a problem. Status Code: ' +
+    //                     response.status);
+    //                 return;
+    //             }
 
-                // Examine the text in the response
-                response.json().then(function(data) {
-                    console.log(data);
-                });
-            }
-        )
-        .catch(function(err) {
-            console.log('Fetch Error :-S', err);
+    //             // Examine the text in the response
+    //             response.json().then(function(data) {
+    //                 console.log(data);
+    //                 retorn = data;
+    //             });
+    //         }
+    //     )
+    //     .catch(function(err) {
+    //         console.log('Fetch Error :-S', err);
+    //     });
+    // console.log(retorn);
+    // return retorn;
+
+    P.getPokemonByName('eevee') // with Promise
+        .then(function(response) {
+            console.log(response);
+        })
+        .catch(function(error) {
+            console.log('There was an ERROR: ', error);
+        });
+
+    P.getPokemonByName(34, function(response, error) { // with callback
+        if (!error) {
+            console.log(response);
+        } else {
+            console.log(error)
+        }
+    });
+
+    P.resource([url])
+        .then(function(response) {
+            console.log(response); // resource function accepts singles or arrays of URLs/paths
         });
 }
