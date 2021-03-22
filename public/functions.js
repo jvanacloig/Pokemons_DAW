@@ -73,6 +73,10 @@ var pokemons_randoms = [{
     src_back: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/94.png"
 }, ];
 window.onload = function() {
+    /* cojerpokemonsrandom();*/
+
+    var num0 = Math.floor(Math.random() * (19 - 0) + 0);
+    console.log(num0);
     cargarinici();
 }
 
@@ -81,17 +85,18 @@ function cargarinici() {
 }
 
 function mostrarpokemons(pokemons_randoms) {
-    for (let i = 1; 1 <= pokemons_randoms.length; i++) {
+    for (let i = 1; 1 <= pokemons_randoms.length - 1; i++) {
         document.getElementById("p" + i).src = pokemons_randoms[i - 1].src_front;
         let t = document.getElementById("c" + i);
         t.classList.add(pokemons_randoms[i - 1].tipo1);
     }
+    cojerpokemonsrandom();
+
 }
 
 function sethabilidades() {
 
     for (let i = 0; i <= habilidades.length - 1; i++) {
-
         var button = document.createElement("button");
         button.innerHTML = habilidades[i].nombre;
         button.style.background = "rgb(0,0,0,0)";
@@ -100,7 +105,6 @@ function sethabilidades() {
         button.id = "h" + i;
         document.getElementById("d" + i).appendChild(button);
         document.getElementById("d" + i).className = habilidades[i].tipo1 + " list col boton_ataque"
-
     }
 }
 
@@ -163,7 +167,6 @@ function atacar(event) {
         document.getElementById("skillsbars").style.display = "block";
         document.getElementById("text_combat").style.display = "none";
     }, 1000);
-
 }
 
 function enemigodañado() {
@@ -231,4 +234,47 @@ function morision() {
 function finjuego() {
 
     location.reload();
+}
+
+function cojerpokemonsrandom() {
+    var num0, num1, num2, num3, num4, num5;
+    num0 = Math.floor(Math.random() * (19 - 0) + 0);
+    num1 = Math.floor(Math.random() * (19 - 0) + 0);
+    num2 = Math.floor(Math.random() * (19 - 0) + 0);
+    num3 = Math.floor(Math.random() * (19 - 0) + 0);
+    num4 = Math.floor(Math.random() * (19 - 0) + 0);
+    num5 = Math.floor(Math.random() * (19 - 0) + 0);
+    this.$http.get('https://pokeapi.co/api/v2/pokemon?offset=20&limit=20').then(function(response) {
+
+        pokemons_randoms[0].name = this.response[num0].name;
+        pokemons_randoms[1].name = this.response[num1].name;
+        pokemons_randoms[2].name = this.response[num2].name;
+        pokemons_randoms[3].name = this.response[num3].name;
+        pokemons_randoms[4].name = this.response[num4].name;
+        pokemons_randoms[5].name = this.response[num5].name;
+        this.get_img(this.response[num0].url, num0);
+
+
+    }, function() {});
+
+
+
+
+}
+
+function get_img(url, num) {
+    this.$http.get(url).then(function(response) {
+        var link_img;
+        link_img = this.response.forms[0].url;
+        print_img(link_img, num);
+
+    }, function() {});
+}
+
+function print_img(url, num) {
+    this.$http.get(url).then(function(response) {
+
+        pokemons_randomsnu[num].src_front = respones.sprites.front_default;
+
+    }, function() {});
 }
