@@ -1,8 +1,8 @@
 var express = require('express');
 //const Player = require('./DataTypes/Player');
-const pokemon = require("./DataTypes/Pokemon");
+//const pokemon = require("./DataTypes/Pokemon");
 const room = require("./DataTypes/Room");
-const stats = require("./DataTypes/Stats");
+//const stats = require("./DataTypes/Stats");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -19,7 +19,7 @@ const Player = {
     },
 
 
-    PlayerToJson: function() {
+    ToJson: function() {
         return [{
             Name: this.name,
             Pokemons: this.pokemons
@@ -31,21 +31,46 @@ const Pokemon = {
     Nombre: "",
     Tipo1: "",
     Tipo2: "",
-    Hablilidades: "",
+    Habilidades: "",
     url: "",
     stats: "",
 
-    Pokemon: function(Nombre, Tipo1, Tipo2, Hablilidades, url, stats) {
+    Pokemon: function(Nombre, Tipo1, Tipo2, Habilidades, url, stats) {
         this.Nombre = Nombre;
         this.Tipo1 = Tipo1;
         this.Tipo2 = Tipo2;
-        this.Hablilidades = Hablilidades;
+        this.Habilidades = Habilidades;
         this.url = url;
         this.stats = stats;
     },
 
-    PokemonToJson: function() {
+    ToJson: function() {
+        return [{
+            Name: this.Name,
+            Tipo1: this.Tipo1,
+            Tipo2: this.Tipo2,
+            Habilidades: this.Habilidades,
+            Url: this.url,
+            Stats: this.stats
+        }];
+    }
+}
 
+const stats = {
+    var hp;
+    var attack;
+    var defense;
+    var special_attack;
+    var special_defense;
+    var speed;
+
+    function Stats(hp, attack, defense, special_attack, special_defense, speed) {
+        this.hp = hp;
+        this.attack = attack;
+        this.defense = defense;
+        this.special_attack = special_attack;
+        this.special_defense = special_defense;
+        this.speed = speed;
     }
 }
 
@@ -96,7 +121,7 @@ io.on('connection', function(socket) {
     let pokemons = GetRandomPokemons();
     let player = Object.create(Player);
     player.Player("a", pokemons, socket);
-    console.log(player.PlayerToJson());
+    console.log(player.ToJson());
     Enviar('PokemonsRandom', player.PlayerToJson(), socket);
 
     socket.on('PokemonsRandomOK', function() {
@@ -131,7 +156,8 @@ function GetRandomPokemons() {
         let url = 'https://pokeapi.co/api/v2/pokemon/' + apiData[numPokemons[i].name] + '/';
         let pokemonData = GetApiData(url);
         if (pokemonData.types.length > 1) {
-            pokemons[i] = new pokemon.Pokemon(
+            pokemons[i] = Object.create(Pokemon);
+            pokemons[i].Pokemon(
                 pokemonData.name,
                 pokemonData.types[0],
                 pokemonData.types[1],
@@ -145,7 +171,8 @@ function GetRandomPokemons() {
                     pokemonData.stats[5].base_stat)
             )
         } else {
-            pokemons[i] = new pokemon.Pokemon(
+            pokemons[i] = Object.create(Pokemon);
+            pokemons[i].Pokemon(
                 pokemonData.name,
                 pokemonData.types[0],
                 pokemonData.types[0],
