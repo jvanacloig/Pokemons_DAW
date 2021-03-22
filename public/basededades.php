@@ -11,24 +11,24 @@ if (!$conn) {
 }
 echo "Connected successfully";
 mysqli_close($conn);
-//consulta
-$consulta = "SELECT * FROM alumnos";
-$resultado = mysqli_query( $conexion, $consulta );
-$sql = "INSERT INTO Jugador (idJugador, Nombre, Id_Pokemons_api) VALUES ('1', 'Proba', '23')";
-$result = $conn->query($sql);
+//añadir jugador
 
+$consulta = "SELECT * FROM sala";
+$resultado = mysqli_query( $conn, $consulta );
+$sql = "INSERT INTO jugador (idJugador, Nombre, Id_Pokemons_api) VALUES ('2', 'Proba2', '23')";
+//$result = $conn->query($sql);
 
+//ver jugadores
+$consulta = "SELECT * FROM sala";
+$resultado = mysqli_query( $conn, $consulta );
 if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
+    while($row = $resultado->fetch_assoc()) {
         echo "<br> id: ". $row["idJugador"]. " - Name: ". $row["Nombre"]. " " . $row["Id_Pokemon_api"] . "<br>";
     }
 } else {
     echo "0 results";
 }
-
-
-
 //cerrarconexion
 mysqli_close( $conexion );
 ?>
