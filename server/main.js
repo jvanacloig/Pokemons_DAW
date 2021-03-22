@@ -1,4 +1,5 @@
 var express = require('express');
+const { stat } = require('fs');
 //const Player = require('./DataTypes/Player');
 //const pokemon = require("./DataTypes/Pokemon");
 const room = require("./DataTypes/Room");
@@ -56,21 +57,32 @@ const Pokemon = {
     }
 }
 
-const stats = {
-    var hp;
-    var attack;
-    var defense;
-    var special_attack;
-    var special_defense;
-    var speed;
+const Stats = {
+    hp: "",
+    attack: "",
+    defense: "",
+    special_attack: "",
+    special_defense: "",
+    speed: "",
 
-    function Stats(hp, attack, defense, special_attack, special_defense, speed) {
+    Stats: function(hp, attack, defense, special_attack, special_defense, speed) {
         this.hp = hp;
         this.attack = attack;
         this.defense = defense;
         this.special_attack = special_attack;
         this.special_defense = special_defense;
         this.speed = speed;
+    },
+
+    ToJson: function() {
+        return [{
+            Hp: this.hp,
+            Attack: this.attack,
+            Defense: this.defense,
+            Special_Attack: this.special_attack,
+            Special_Defense: this.special_defense,
+            Speed: this.speed
+        }]
     }
 }
 
@@ -157,33 +169,37 @@ function GetRandomPokemons() {
         let pokemonData = GetApiData(url);
         if (pokemonData.types.length > 1) {
             pokemons[i] = Object.create(Pokemon);
+            let stats = Object.create(Stats)
+            stats.Stats(pokemonData.stats[0].base_stat,
+                pokemonData.stats[1].base_stat,
+                pokemonData.stats[2].base_stat,
+                pokemonData.stats[3].base_stat,
+                pokemonData.stats[4].base_stat,
+                pokemonData.stats[5].base_stat)
             pokemons[i].Pokemon(
                 pokemonData.name,
                 pokemonData.types[0],
                 pokemonData.types[1],
                 pokemonData.moves,
                 url,
-                new stats(pokemonData.stats[0].base_stat,
-                    pokemonData.stats[1].base_stat,
-                    pokemonData.stats[2].base_stat,
-                    pokemonData.stats[3].base_stat,
-                    pokemonData.stats[4].base_stat,
-                    pokemonData.stats[5].base_stat)
+                stats
             )
         } else {
             pokemons[i] = Object.create(Pokemon);
+            let stats = Object.create(Stats)
+            stats.Stats(pokemonData.stats[0].base_stat,
+                pokemonData.stats[1].base_stat,
+                pokemonData.stats[2].base_stat,
+                pokemonData.stats[3].base_stat,
+                pokemonData.stats[4].base_stat,
+                pokemonData.stats[5].base_stat)
             pokemons[i].Pokemon(
                 pokemonData.name,
                 pokemonData.types[0],
                 pokemonData.types[0],
                 pokemonData.moves,
                 url,
-                new stats(pokemonData.stats[0].base_stat,
-                    pokemonData.stats[1].base_stat,
-                    pokemonData.stats[2].base_stat,
-                    pokemonData.stats[3].base_stat,
-                    pokemonData.stats[4].base_stat,
-                    pokemonData.stats[5].base_stat)
+                stats
             )
         }
     }
