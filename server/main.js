@@ -1,4 +1,3 @@
-const { Console } = require('console');
 var express = require('express');
 const pokemon = require("./DataTypes/Pokemon");
 const room = require("./DataTypes/Room");
