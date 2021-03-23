@@ -9,6 +9,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 const fetch = require('node-fetch');
 var Pokedex = require('pokedex-promise-v2');
+const { decode } = require('querystring');
 var P = new Pokedex();
 
 const Player = {
@@ -30,7 +31,7 @@ const Player = {
         }];
         for (let i = 0; i < this.pokemons.length; i++) {
             out[0].Pokemons[i] = this.pokemons[i].ToJson();
-            console.log(this.pokemons[i].ToJson());
+            //console.log(this.pokemons[i].ToJson());
         }
         return out;
     }
@@ -171,12 +172,14 @@ function GetRandomPokemons() {
     for (let i = 0; i < 6; i++) {
         numPokemons[i] = GetRandomPokemon(numPokemons);
     }
-    let apiData = GetApiData('https://pokeapi.co/api/v2/generation/1/');
+    let apiData = decode(GetApiData('https://pokeapi.co/api/v2/generation/1/'));
     apiData = apiData.pokemon_species;
     for (let i = 0; i < numPokemons.length; i++) {
-        let url = 'https://pokeapi.co/api/v2/pokemon/' + apiData[numPokemons[i].name] + '/';
-        let pokemonData = GetApiData(url);
-        if (pokemonData.types.length > 1) {
+        let url = 'https://pokeapi.co/api/v2/pokemon/' + numPokemons[i] + '/';
+        
+        let pokemonData = decode(GetApiData(url));
+        console.log(pokemonData);
+       /* if (pokemonData.types.length > 1) {
             pokemons[i] = Object.create(Pokemon);
             let stats = Object.create(Stats)
             stats.Stats(pokemonData.stats[0].base_stat,
@@ -210,7 +213,7 @@ function GetRandomPokemons() {
                 url,
                 stats.ToJson()
             )
-        }
+        }*/
     }
     pokemons_enviar = [];
     // pokemons.forEach(pokemon => {
@@ -274,6 +277,6 @@ function GetApiData(url) {
 
     P.resource([url])
         .then(function(response) {
-            console.log(response); // resource function accepts singles or arrays of URLs/paths
+           console.log(response); // resource function accepts singles or arrays of URLs/paths
         });
 }
