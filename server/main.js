@@ -16,11 +16,15 @@ var options = {
     timeout: 5 * 1000 // 5s
 }
 var P = new Pokedex(options);
+var danyAtac = 20;
+
 
 const Player = {
     name: "",
     pokemons: [],
     socket: "",
+    ready: false,
+    hp: 100,
 
     Player: function(name, pokemons, socket) {
         this.name = name;
@@ -29,17 +33,17 @@ const Player = {
     },
 
 
-    // ToJson: function() {
-    //     let out = [{
-    //         Name: this.name,
-    //         Pokemons: []
-    //     }];
-    //     for (let i = 0; i < this.pokemons.length; i++) {
-    //         out[0].Pokemons[i] = this.pokemons[i].ToJson();
-    //         //console.log(this.pokemons[i].ToJson());
-    //     }
-    //     return out;
-    // }
+    ToJson: function() {
+        let out = [{
+            Name: this.name,
+            Pokemons: []
+        }];
+        for (let i = 0; i < this.pokemons.length; i++) {
+            out[0].Pokemons[i] = this.pokemons[i].ToJson();
+            //console.log(this.pokemons[i].ToJson());
+        }
+        return out;
+    }
 };
 
 const Pokemon = {
@@ -144,15 +148,15 @@ app.get('/hello', function(req, res) {
 io.on('connection', function(socket) {
 
     socket.on('RetornarDades', function(dades) {
-        if (players[0].socket.id == socket.id) {
+        if (players[0].socket.client.id == socket.client.id) {
             players[0].pokemons.push(dades);
             if (players[0].pokemons.length >= 6) {
-                Enviar('PokemonsRandom', players[0].pokemons, socket);
+                socket.emit('PokemonsRandom', players[0].pokemons);
             }
-        } else if (players[1].socket.id == socket.id) {
+        } else if (players[1].socket.client.id == socket.client.id) {
             players[1].pokemons.push(dades);
             if (players[1].pokemons.length >= 6) {
-                Enviar('PokemonsRandom', players[1].pokemons, socket);
+                socket.emit('PokemonsRandom', players[1].pokemons);
             }
         }
     });
@@ -164,25 +168,66 @@ io.on('connection', function(socket) {
     let player = Object.create(Player);
     //player.Player(Player1, pokemons, socket);
     player.socket = socket;
+    player.pokemons = [];
     players.push(player);
     let pokemons = GetRandomPokemons(socket);
+
     //console.log(player.ToJson());
 
 
     socket.on('PokemonsRandomOK', function() {
-        Console.log('PokemonsRandomOK')
-        Enviar('Sales', rooms);
+        if (players[0].socket.client.id == socket.id) {
+            players[0].ready = true;
+        } else {
+            players[1].ready = true;
+        }
+        if (players[0].ready & players[1].ready) {
+            if (players[0].socket.client.id == socket.id) {
+                if (players[0].pokemons[0].stats[5] > players[1].pokemons[0].stats[5]) {
+                    Enviar('IniciCombat', true, socket);
+                    Enviar('IniciCombat', false, players[1].socket);
+                } else {
+                    Enviar('IniciCombat', false, socket);
+                    Enviar('IniciCombat', true, players[1].socket);
+                }
+            } else {
+                if (players[1].pokemons[0].stats[5] > players[0].pokemons[0].stats[5]) {
+                    Enviar('IniciCombat', true, socket);
+                    Enviar('IniciCombat', false, players[0].socket);
+                } else {
+                    Enviar('IniciCombat', false, socket);
+                    Enviar('IniciCombat', true, players[0].socket);
+                }
+            }
+        }
+    });
+
+    socket.on('RebreAtac', function() {
+        if (players[0].socket.client.id == socket.id) {
+            players[1].hp -= 20;
+            if (players[1].hp <= 0) {
+                Enviar('FinalCombat', true, socket);
+                Enviar('FinalCombat', false, players[1].socket)
+            } else {
+                Enviar('Atac', false, socket);
+                Enviar('Atac', true, players[1].socket);
+            }
+        } else {
+            players[0].hp -= 20;
+            if (players[0].hp <= 0) {
+                Enviar('FinalCombat', true, socket);
+                Enviar('FinalCombat', false, players[0].socket)
+            } else {
+                Enviar('Atac', false, socket);
+                Enviar('Atac', true, players[0].socket);
+            }
+        }
     });
 
     socket.on('SalesOk', function() {
-        Enviar('Sales', rooms);
+
     });
-    console.log(players);
 });
-
-function afegirPokemonPlayer() {
-
-};
 
 server.listen(25001, function() {
     console.log("Servidor corriendo en http://172.24.3.178:25001");
