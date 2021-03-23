@@ -11,8 +11,7 @@ if (!$conn) {
 }
 echo "Connected successfully";
 mysqli_close($conn);
-//añadir jugador
-
+//añadir jugador  
 $consulta = "SELECT * FROM sala";
 $resultado = mysqli_query( $conn, $consulta );
 $sql = "INSERT INTO jugador (idJugador, Nombre, Id_Pokemons_api) VALUES ('2', 'Proba2', '23')";
