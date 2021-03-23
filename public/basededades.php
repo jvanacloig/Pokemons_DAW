@@ -1,5 +1,5 @@
 <?php
-$servername="127.0.0.1";
+$servername="172.24.1.173";
 $database = "pokemons_daw";
 $username="root";
 $password="";
@@ -17,7 +17,6 @@ $consulta = "SELECT * FROM sala";
 $resultado = mysqli_query( $conn, $consulta );
 $sql = "INSERT INTO jugador (idJugador, Nombre, Id_Pokemons_api) VALUES ('2', 'Proba2', '23')";
 //$result = $conn->query($sql);
-
 //ver jugadores
 $consulta = "SELECT * FROM sala";
 $resultado = mysqli_query( $conn, $consulta );
