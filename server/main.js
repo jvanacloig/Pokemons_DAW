@@ -10,7 +10,12 @@ var io = require('socket.io')(server);
 const fetch = require('node-fetch');
 var Pokedex = require('pokedex-promise-v2');
 const { decode } = require('querystring');
-var P = new Pokedex();
+var options = {
+    versionPath: '/api/v2/',
+    cacheLimit: 100 * 1000, // 100s
+    timeout: 5 * 1000 // 5s
+}
+var P = new Pokedex(options);
 
 const Player = {
     name: "",
@@ -24,17 +29,17 @@ const Player = {
     },
 
 
-    ToJson: function() {
-        let out = [{
-            Name: this.name,
-            Pokemons: []
-        }];
-        for (let i = 0; i < this.pokemons.length; i++) {
-            out[0].Pokemons[i] = this.pokemons[i].ToJson();
-            //console.log(this.pokemons[i].ToJson());
-        }
-        return out;
-    }
+    // ToJson: function() {
+    //     let out = [{
+    //         Name: this.name,
+    //         Pokemons: []
+    //     }];
+    //     for (let i = 0; i < this.pokemons.length; i++) {
+    //         out[0].Pokemons[i] = this.pokemons[i].ToJson();
+    //         //console.log(this.pokemons[i].ToJson());
+    //     }
+    //     return out;
+    // }
 };
 
 const Pokemon = {
@@ -138,13 +143,31 @@ app.get('/hello', function(req, res) {
 
 io.on('connection', function(socket) {
 
+    socket.on('RetornarDades', function(dades) {
+        if (players[0].socket.id == socket.id) {
+            players[0].pokemons.push(dades);
+            if (players[0].pokemons.length >= 6) {
+                Enviar('PokemonsRandom', players[0].pokemons, socket);
+            }
+        } else if (players[1].socket.id == socket.id) {
+            players[1].pokemons.push(dades);
+            if (players[1].pokemons.length >= 6) {
+                Enviar('PokemonsRandom', players[1].pokemons, socket);
+            }
+        }
+    });
+
     console.log('Client connected');
-    let pokemons = GetRandomPokemons();
-    console.log(pokemons);
+
+
+    //console.log(pokemons);
     let player = Object.create(Player);
-    player.Player("a", pokemons, socket);
-    console.log(player.ToJson());
-    Enviar('PokemonsRandom', player.ToJson(), socket);
+    //player.Player(Player1, pokemons, socket);
+    player.socket = socket;
+    players.push(player);
+    let pokemons = GetRandomPokemons(socket);
+    //console.log(player.ToJson());
+
 
     socket.on('PokemonsRandomOK', function() {
         Console.log('PokemonsRandomOK')
@@ -154,11 +177,15 @@ io.on('connection', function(socket) {
     socket.on('SalesOk', function() {
         Enviar('Sales', rooms);
     });
-
+    console.log(players);
 });
 
+function afegirPokemonPlayer() {
+
+};
+
 server.listen(25001, function() {
-    console.log("Servidor corriendo en http://192.168.18.5:25001");
+    console.log("Servidor corriendo en http://172.24.3.178:25001");
 });
 
 
@@ -166,54 +193,69 @@ function Enviar(key, content, socket) {
     socket.emit(key, content);
 };
 
-function GetRandomPokemons() {
-    let numPokemons = [];
-    let pokemons = [];
+function GetRandomPokemons(socket) {
+    var numPokemons = [];
+    var pokemons = [];
     for (let i = 0; i < 6; i++) {
         numPokemons[i] = GetRandomPokemon(numPokemons);
     }
-    let apiData = decode(GetApiData('https://pokeapi.co/api/v2/generation/1/'));
-    apiData = apiData.pokemon_species;
+    // let apiData = decode(GetApiData('https://pokeapi.co/api/v2/generation/1/'));
+    // apiData = apiData.pokemon_species;
     for (let i = 0; i < numPokemons.length; i++) {
-        let url = 'https://pokeapi.co/api/v2/pokemon/' + numPokemons[i] + '/';
-        
-        let pokemonData = decode(GetApiData(url));
-        console.log(pokemonData);
-       /* if (pokemonData.types.length > 1) {
-            pokemons[i] = Object.create(Pokemon);
-            let stats = Object.create(Stats)
-            stats.Stats(pokemonData.stats[0].base_stat,
-                pokemonData.stats[1].base_stat,
-                pokemonData.stats[2].base_stat,
-                pokemonData.stats[3].base_stat,
-                pokemonData.stats[4].base_stat,
-                pokemonData.stats[5].base_stat)
-            pokemons[i].Pokemon(
-                pokemonData.name,
-                pokemonData.types[0],
-                pokemonData.types[1],
-                pokemonData.moves,
-                url,
-                stats.ToJson()
-            )
-        } else {
-            pokemons[i] = Object.create(Pokemon);
-            let stats = Object.create(Stats)
-            stats.Stats(pokemonData.stats[0].base_stat,
-                pokemonData.stats[1].base_stat,
-                pokemonData.stats[2].base_stat,
-                pokemonData.stats[3].base_stat,
-                pokemonData.stats[4].base_stat,
-                pokemonData.stats[5].base_stat)
-            pokemons[i].Pokemon(
-                pokemonData.name,
-                pokemonData.types[0],
-                pokemonData.types[0],
-                pokemonData.moves,
-                url,
-                stats.ToJson()
-            )
-        }*/
+        var dadesApi = "";
+        var text;
+        // let pokemonData = GetApiData(numPokemons[i]);
+
+        // console.log(text);
+        decode(dadesApi = P.getPokemonByName(numPokemons[i], function(response, error) { // with callback
+            if (!error) {
+                dadesApi = response;
+                return dadesApi;
+            } else {
+                console.log(error)
+            }
+        }));
+        dadesApi.then(function() {
+            socket.emit('EnviarDades', dadesApi);
+            return dadesApi;
+        });
+        //console.log(dadesApi);
+        //console.log(pokemonData);
+        // if (pokemonData.types.length > 1) {
+        //     pokemons[i] = Object.create(Pokemon);
+        //     let stats = Object.create(Stats)
+        //     stats.Stats(pokemonData.stats[0].base_stat,
+        //         pokemonData.stats[1].base_stat,
+        //         pokemonData.stats[2].base_stat,
+        //         pokemonData.stats[3].base_stat,
+        //         pokemonData.stats[4].base_stat,
+        //         pokemonData.stats[5].base_stat)
+        //     pokemons[i].Pokemon(
+        //         pokemonData.name,
+        //         pokemonData.types[0],
+        //         pokemonData.types[1],
+        //         pokemonData.moves,
+        //         url,
+        //         stats.ToJson()
+        //     )
+        // } else {
+        //     pokemons[i] = Object.create(Pokemon);
+        //     let stats = Object.create(Stats)
+        //     stats.Stats(pokemonData.stats[0].base_stat,
+        //         pokemonData.stats[1].base_stat,
+        //         pokemonData.stats[2].base_stat,
+        //         pokemonData.stats[3].base_stat,
+        //         pokemonData.stats[4].base_stat,
+        //         pokemonData.stats[5].base_stat)
+        //     pokemons[i].Pokemon(
+        //         pokemonData.name,
+        //         pokemonData.types[0],
+        //         pokemonData.types[0],
+        //         pokemonData.moves,
+        //         url,
+        //         stats.ToJson()
+        //     )
+        // }
     }
     pokemons_enviar = [];
     // pokemons.forEach(pokemon => {
@@ -234,7 +276,7 @@ function GetRandomPokemon(numPokemons) {
     return num;
 };
 
-function GetApiData(url) {
+async function GetApiData(num) {
     // let retorn;
     // console.log(url);
     // fetch(url)
@@ -259,24 +301,25 @@ function GetApiData(url) {
     // console.log(retorn);
     // return retorn;
 
-    P.getPokemonByName('eevee') // with Promise
-        .then(function(response) {
-            console.log(response);
-        })
-        .catch(function(error) {
-            console.log('There was an ERROR: ', error);
-        });
+    // P.getPokemonByName('eevee') // with Promise
+    //     .then(function(response) {
+    //         console.log(response);
+    //     })
+    //     .catch(function(error) {
+    //         console.log('There was an ERROR: ', error);
+    //     });
 
-    P.getPokemonByName(34, function(response, error) { // with callback
+    P.getPokemonByName(num, function(response, error) { // with callback
         if (!error) {
-            console.log(response);
+            console.log(response)
         } else {
             console.log(error)
         }
     });
 
-    P.resource([url])
-        .then(function(response) {
-           console.log(response); // resource function accepts singles or arrays of URLs/paths
-        });
+
+    // P.resource([url])
+    //     .then(function(response) {
+    //         return response; // resource function accepts singles or arrays of URLs/paths
+    //     });
 }
