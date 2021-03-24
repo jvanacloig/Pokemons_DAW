@@ -25,6 +25,7 @@ const Player = {
     socket: "",
     ready: false,
     hp: 100,
+    pokPosition: 0,
 
     Player: function(name, pokemons, socket) {
         this.name = name;
@@ -176,18 +177,20 @@ io.on('connection', function(socket) {
     //console.log(player.ToJson());
 
 
-    socket.on('PokemonsRandomOK', function() {
+    socket.on('PokemonsRandomOK', function(data) {
         if (players[0].socket.id == socket.id) {
             players[0].ready = true;
-            players[0].hp = players[0].pokemons[0].order;
+            players[0].hp = players[0].pokemons[data].order;
+            players[0].pokPosition = data;
         } else {
             players[1].ready = true;
-            players[1].hp = players[1].pokemons[0].order;
+            players[1].hp = players[1].pokemons[data].order;
+            players[1].pokPosition = data;
         }
         if (players[0].ready & players[1] !=null){
                 if(players[1].ready) {
-                Enviar('PokemonRival', players[0].pokemons, players[1].socket);
-                Enviar('PokemonRival', players[1].pokemons, players[0].socket);
+                Enviar('PokemonRival', players[0].pokemons[players[0].pokPosition], players[1].socket);
+                Enviar('PokemonRival', players[1].pokemons[players[1].pokPosition], players[0].socket);
                 if (players[0].socket.id == socket.id) {
                     if (players[0].pokemons[0].stats[5] > players[1].pokemons[0].stats[5]) {
                         Enviar('IniciCombat', true, socket);

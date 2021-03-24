@@ -30,10 +30,10 @@ var habilidades = [{
 
 
 socket.on('PokemonRival', function(data){
-    document.getElementById("pokemonseleccionat_2").src = data[0].sprites.front_default;
-    document.getElementById("su_vida").textContent = data[0].order;
-    vidaActualRival = vidaInicialRival = data[0].order;
-    document.getElementById("nom_pokemonseleccionat_seu").textContent = data[0].name;
+    document.getElementById("pokemonseleccionat_2").src = data.sprites.front_default;
+    document.getElementById("su_vida").textContent = data.order;
+    vidaActualRival = vidaInicialRival = data.order;
+    document.getElementById("nom_pokemonseleccionat_seu").textContent = data.name;
 })
 
 socket.on('PokemonsRandom', function(data) {
@@ -99,22 +99,22 @@ socket.on('FinalCombat', function(data){
     }
 })
 
-function jugar() {
+function jugar(num) {
     document.getElementById("selec_pokemon").style.display = "none";
     document.getElementById("ingame").style.display = "block";
     //sethabilidades();
-    colocarpokemons_combat();
-    socket.emit('PokemonsRandomOK');
+    colocarpokemons_combat(num);
+    socket.emit('PokemonsRandomOK', num);
 }
 
-function colocarpokemons_combat() {
+function colocarpokemons_combat(num) {
     /*tu primer pokemon*/
     console.log(arrayPokemons);
-    document.getElementById("pokemonseleccionat_1").src = arrayPokemons[0].sprites.back_default;
-    document.getElementById("nom_pokemonseleccionat_teu").textContent = arrayPokemons[0].name;
-    document.getElementById("tu_vida").textContent = arrayPokemons[0].order;
-    vidaActual = vidaInicial = arrayPokemons[0].order;
-    let t = document.getElementById("conten_" + 0);
+    document.getElementById("pokemonseleccionat_1").src = arrayPokemons[num].sprites.back_default;
+    document.getElementById("nom_pokemonseleccionat_teu").textContent = arrayPokemons[num].name;
+    document.getElementById("tu_vida").textContent = arrayPokemons[num].order;
+    vidaActual = vidaInicial = arrayPokemons[num].order;
+    let t = document.getElementById("conten_" + num);
     t.style.border = "3px white solid";
 }
 
