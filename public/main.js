@@ -1,4 +1,4 @@
-var socket = io.connect('http://192.168.1.83:25001', { 'forceNew': true });
+var socket = io.connect('http://172.24.3.178:25001', { 'forceNew': true });
 let arrayPokemons;
 var vidaInicial;
 var vidaActual;
@@ -29,31 +29,32 @@ var habilidades = [{
 }];
 
 
-socket.on('PokemonRival', function(data){
+socket.on('PokemonRival', function(data) {
     document.getElementById("pokemonseleccionat_2").src = data.sprites.front_default;
-    document.getElementById("su_vida").textContent = data.order;
-    vidaActualRival = vidaInicialRival = data.order;
+    document.getElementById("su_vida").textContent = data.stats[0].base_stat;
+    vidaActualRival = vidaInicialRival = data.stats[0].base_stat;
     document.getElementById("nom_pokemonseleccionat_seu").textContent = data.name;
 })
 
 socket.on('PokemonsRandom', function(data) {
     console.log(data);
-    document.getElementById("p1").src=data[0].sprites.front_default;
-    document.getElementById("p2").src=data[1].sprites.front_default;
-    document.getElementById("p3").src=data[2].sprites.front_default;
-    document.getElementById("p4").src=data[3].sprites.front_default;
-    document.getElementById("p5").src=data[4].sprites.front_default;
-    document.getElementById("p6").src=data[5].sprites.front_default;
+    document.getElementById("p1").src = data[0].sprites.front_default;
+    document.getElementById("p2").src = data[1].sprites.front_default;
+    document.getElementById("p3").src = data[2].sprites.front_default;
+    document.getElementById("p4").src = data[3].sprites.front_default;
+    document.getElementById("p5").src = data[4].sprites.front_default;
+    document.getElementById("p6").src = data[5].sprites.front_default;
     arrayPokemons = data;
 })
 
-socket.on('IniciCombat', function(data){
-    if(!data){
+socket.on('IniciCombat', function(data) {
+    console.log(data);
+    if (!data) {
         document.getElementById("skillsbars").style.display = "none";
         document.getElementById("text_combat").style.display = "block";
         document.getElementById("text_combat").textContent = "Toca iniciar al rival";
     }
-    if(data){
+    if (data) {
         sethabilidades();
     }
 })
@@ -62,40 +63,41 @@ socket.on('EnviarDades', function(data) {
     socket.emit('RetornarDades', data);
 })
 
-socket.on('Atac', function(data){
-    if(data) {
+socket.on('Atac', function(data) {
+    if (data) {
         document.getElementById("skillsbars").style.display = "block";
         document.getElementById("text_combat").style.display = "none";
         sethabilidades();
-        if(document.getElementById('tu_vida').style.width == '100%'){
+        if (document.getElementById('tu_vida').style.width == '100%') {
             document.getElementById('tu_vida').style.width = '80%';
             vidaActual -= 20;
             document.getElementById("tu_vida").textContent = vidaActual;
-            document.getElementById('tu_vida').style.width = '' +  (vidaActual * 100)/vidaInicial + '%';
-        }
-        else{
+            document.getElementById('tu_vida').style.width = '' + (vidaActual * 100) / vidaInicial + '%';
+        } else {
             console.log(document.getElementById('tu_vida').style.width);
             vidaActual -= 20;
             document.getElementById("tu_vida").textContent = vidaActual;
-            document.getElementById('tu_vida').style.width = '' +  (vidaActual * 100)/vidaInicial + '%';
-            
+            document.getElementById('tu_vida').style.width = '' + (vidaActual * 100) / vidaInicial + '%';
+
         }
     }
 })
 
-socket.on('FinalCombat', function(data){
-    if(data) {
+socket.on('FinalCombat', function(data) {
+    if (data) {
         document.getElementById("skillsbars").style.display = "none";
         document.getElementById("text_combat").style.display = "block";
         document.getElementById("text_combat").textContent = "Has guanyat";
-    }
-    else{
+        vidaActual -= 20;
+        document.getElementById("su_vida").textContent = vidaActual;
+        document.getElementById('su_vida').style.width = 0;
+    } else {
         document.getElementById("skillsbars").style.display = "none";
         document.getElementById("text_combat").style.display = "block";
         document.getElementById("text_combat").textContent = "Has perdut";
         vidaActual -= 20;
         document.getElementById("tu_vida").textContent = vidaActual;
-        document.getElementById('tu_vida').style.width = '' +  (vidaActual * 100)/vidaInicial + '%';
+        document.getElementById('tu_vida').style.width = 0;
     }
 })
 
@@ -112,8 +114,8 @@ function colocarpokemons_combat(num) {
     console.log(arrayPokemons);
     document.getElementById("pokemonseleccionat_1").src = arrayPokemons[num].sprites.back_default;
     document.getElementById("nom_pokemonseleccionat_teu").textContent = arrayPokemons[num].name;
-    document.getElementById("tu_vida").textContent = arrayPokemons[num].order;
-    vidaActual = vidaInicial = arrayPokemons[num].order;
+    document.getElementById("tu_vida").textContent = arrayPokemons[num].stats[0].base_stat;
+    vidaActual = vidaInicial = arrayPokemons[num].stats[0].base_stat;
     let t = document.getElementById("conten_" + num);
     t.style.border = "3px white solid";
 }
@@ -145,7 +147,7 @@ function atacar(event) {
 
     document.getElementById("text_combat").textContent = "has utilitzat " + habilidades[idSkill].nombre + " esperant resposta del rival";
 
-   
+
     setTimeout(function() {
         document.getElementById("pokemonseleccionat_1").style.width = "450px";
         document.getElementById("pokemonseleccionat_1").style.zIndex = "1";
@@ -157,23 +159,22 @@ function atacar(event) {
             document.getElementById("pokemonseleccionat_1").style.top = pred3;
             document.getElementById("pokemonseleccionat_1").style.zIndex = pred2;
             document.getElementById("pokemonseleccionat_1").style.width = widthpo;
-            if(document.getElementById('su_vida').style.width == ''){
+            if (document.getElementById('su_vida').style.width == '') {
                 vidaActualRival -= 20;
                 document.getElementById("su_vida").textContent = vidaActualRival;
-                document.getElementById('su_vida').style.width = '' +  (vidaActualRival * 100)/vidaInicialRival + '%';
-            }
-            else{
+                document.getElementById('su_vida').style.width = '' + (vidaActualRival * 100) / vidaInicialRival + '%';
+            } else {
                 vidaActualRival -= 20;
                 document.getElementById("su_vida").textContent = vidaActualRival;
-                document.getElementById('su_vida').style.width = '' +  (vidaActualRival * 100)/vidaInicialRival + '%';
+                document.getElementById('su_vida').style.width = '' + (vidaActualRival * 100) / vidaInicialRival + '%';
             }
         }, 200);
     }, 200);
     socket.emit('RebreAtac')
-    // setTimeout(function() {
-    //     document.getElementById("skillsbars").style.display = "block";
-    //     document.getElementById("text_combat").style.display = "none";
-    // }, 1000);
+        // setTimeout(function() {
+        //     document.getElementById("skillsbars").style.display = "block";
+        //     document.getElementById("text_combat").style.display = "none";
+        // }, 1000);
 }
 
 function enemigodañado() {

@@ -149,6 +149,14 @@ app.get('/hello', function(req, res) {
 
 io.on('connection', function(socket) {
 
+    socket.on("disconnect", () => {
+        if (players[0].socket.id = socket.id) {
+            players.splice(0);
+        } else {
+            players.splice(1);
+        }
+        console.log(players);
+    });
     socket.on('RetornarDades', function(dades) {
         if (players[0].socket.client.id == socket.client.id) {
             players[0].pokemons.push(dades);
@@ -180,19 +188,19 @@ io.on('connection', function(socket) {
     socket.on('PokemonsRandomOK', function(data) {
         if (players[0].socket.id == socket.id) {
             players[0].ready = true;
-            players[0].hp = players[0].pokemons[data].order;
+            players[0].hp = players[0].pokemons[data].stats[0].base_stat;
             players[0].pokPosition = data;
         } else {
             players[1].ready = true;
-            players[1].hp = players[1].pokemons[data].order;
+            players[1].hp = players[1].pokemons[data].stats[0].base_stat;
             players[1].pokPosition = data;
         }
-        if (players[0].ready & players[1] !=null){
-                if(players[1].ready) {
+        if (players[0].ready & players[1] != null) {
+            if (players[1].ready) {
                 Enviar('PokemonRival', players[0].pokemons[players[0].pokPosition], players[1].socket);
                 Enviar('PokemonRival', players[1].pokemons[players[1].pokPosition], players[0].socket);
                 if (players[0].socket.id == socket.id) {
-                    if (players[0].pokemons[0].stats[5] > players[1].pokemons[0].stats[5]) {
+                    if (players[0].pokemons[players[0].pokPosition].stats[5].base_stat > players[1].pokemons[players[1].pokPosition].stats[5].base_stat) {
                         Enviar('IniciCombat', true, socket);
                         Enviar('IniciCombat', false, players[1].socket);
                     } else {
@@ -200,7 +208,7 @@ io.on('connection', function(socket) {
                         Enviar('IniciCombat', true, players[1].socket);
                     }
                 } else {
-                    if (players[1].pokemons[0].stats[5] > players[0].pokemons[0].stats[5]) {
+                    if (players[1].pokemons[players[1].pokPosition].stats[5].base_stat > players[0].pokemons[players[0].pokPosition].stats[5].base_stat) {
                         Enviar('IniciCombat', true, socket);
                         Enviar('IniciCombat', false, players[0].socket);
                     } else {
