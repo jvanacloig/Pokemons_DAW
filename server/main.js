@@ -30,6 +30,7 @@ const Player = {
         this.name = name;
         this.pokemons = pokemons;
         this.socket = socket;
+        this.ready = false;
     },
 
 
@@ -176,39 +177,47 @@ io.on('connection', function(socket) {
 
 
     socket.on('PokemonsRandomOK', function() {
-        if (players[0].socket.client.id == socket.id) {
+        if (players[0].socket.id == socket.id) {
             players[0].ready = true;
+            players[0].hp = players[0].pokemons[0].order;
         } else {
             players[1].ready = true;
+            players[1].hp = players[1].pokemons[0].order;
         }
-        if (players[0].ready & players[1].ready) {
-            if (players[0].socket.client.id == socket.id) {
-                if (players[0].pokemons[0].stats[5] > players[1].pokemons[0].stats[5]) {
-                    Enviar('IniciCombat', true, socket);
-                    Enviar('IniciCombat', false, players[1].socket);
+        if (players[0].ready & players[1] !=null){
+                if(players[1].ready) {
+                Enviar('PokemonRival', players[0].pokemons, players[1].socket);
+                Enviar('PokemonRival', players[1].pokemons, players[0].socket);
+                if (players[0].socket.id == socket.id) {
+                    if (players[0].pokemons[0].stats[5] > players[1].pokemons[0].stats[5]) {
+                        Enviar('IniciCombat', true, socket);
+                        Enviar('IniciCombat', false, players[1].socket);
+                    } else {
+                        Enviar('IniciCombat', false, socket);
+                        Enviar('IniciCombat', true, players[1].socket);
+                    }
                 } else {
-                    Enviar('IniciCombat', false, socket);
-                    Enviar('IniciCombat', true, players[1].socket);
-                }
-            } else {
-                if (players[1].pokemons[0].stats[5] > players[0].pokemons[0].stats[5]) {
-                    Enviar('IniciCombat', true, socket);
-                    Enviar('IniciCombat', false, players[0].socket);
-                } else {
-                    Enviar('IniciCombat', false, socket);
-                    Enviar('IniciCombat', true, players[0].socket);
+                    if (players[1].pokemons[0].stats[5] > players[0].pokemons[0].stats[5]) {
+                        Enviar('IniciCombat', true, socket);
+                        Enviar('IniciCombat', false, players[0].socket);
+                    } else {
+                        Enviar('IniciCombat', false, socket);
+                        Enviar('IniciCombat', true, players[0].socket);
+                    }
                 }
             }
         }
     });
 
     socket.on('RebreAtac', function() {
-        if (players[0].socket.client.id == socket.id) {
+        console.log("revent atac");
+        if (players[0].socket.id == socket.id) {
             players[1].hp -= 20;
             if (players[1].hp <= 0) {
                 Enviar('FinalCombat', true, socket);
                 Enviar('FinalCombat', false, players[1].socket)
             } else {
+                console.log("lkfdasj");
                 Enviar('Atac', false, socket);
                 Enviar('Atac', true, players[1].socket);
             }
@@ -218,6 +227,7 @@ io.on('connection', function(socket) {
                 Enviar('FinalCombat', true, socket);
                 Enviar('FinalCombat', false, players[0].socket)
             } else {
+                console.log("tttt");
                 Enviar('Atac', false, socket);
                 Enviar('Atac', true, players[0].socket);
             }
