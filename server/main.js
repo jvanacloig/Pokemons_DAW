@@ -1,9 +1,7 @@
 var express = require('express');
 const { stat } = require('fs');
-//const Player = require('./DataTypes/Player');
-//const pokemon = require("./DataTypes/Pokemon");
+
 const room = require("./DataTypes/Room");
-//const stats = require("./DataTypes/Stats");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -42,7 +40,6 @@ const Player = {
         }];
         for (let i = 0; i < this.pokemons.length; i++) {
             out[0].Pokemons[i] = this.pokemons[i].ToJson();
-            //console.log(this.pokemons[i].ToJson());
         }
         return out;
     }
@@ -107,36 +104,6 @@ const Stats = {
 }
 
 
-// var Pokemon = [{
-//     Nombre: String,
-//     Tipo1: String,
-//     Tipo2: String,
-//     Habilidades: [{
-//         Nombre: String,
-//         Tipo1: String,
-//         Tipo2: String,
-//     }]
-// }];
-
-// var room = [{
-//     Id: Number,
-//     Jugador1: {
-//         Nombre: String,
-//         Pokemon: Pokemon
-//     },
-//     Jugador2: {
-//         Nombre: String,
-//         Pokemon: Pokemon
-//     },
-//     Combat: [{
-//         Atac: {
-//             Numero: Number,
-//             Jugador: String,
-//             Ataque: String
-//         }
-//     }]
-// }];
-
 var rooms = [];
 var players = [];
 var maxPokemons = 151;
@@ -155,7 +122,6 @@ io.on('connection', function(socket) {
         } else {
             players.splice(1);
         }
-        console.log(players);
     });
     socket.on('RetornarDades', function(dades) {
         if (players[0].socket.client.id == socket.client.id) {
@@ -174,15 +140,12 @@ io.on('connection', function(socket) {
     console.log('Client connected');
 
 
-    //console.log(pokemons);
     let player = Object.create(Player);
-    //player.Player(Player1, pokemons, socket);
     player.socket = socket;
     player.pokemons = [];
     players.push(player);
     let pokemons = GetRandomPokemons(socket);
 
-    //console.log(player.ToJson());
 
 
     socket.on('PokemonsRandomOK', function(data) {
@@ -221,14 +184,12 @@ io.on('connection', function(socket) {
     });
 
     socket.on('RebreAtac', function() {
-        console.log("revent atac");
         if (players[0].socket.id == socket.id) {
             players[1].hp -= 20;
             if (players[1].hp <= 0) {
                 Enviar('FinalCombat', true, socket);
                 Enviar('FinalCombat', false, players[1].socket)
             } else {
-                console.log("lkfdasj");
                 Enviar('Atac', false, socket);
                 Enviar('Atac', true, players[1].socket);
             }
@@ -238,15 +199,27 @@ io.on('connection', function(socket) {
                 Enviar('FinalCombat', true, socket);
                 Enviar('FinalCombat', false, players[0].socket)
             } else {
-                console.log("tttt");
                 Enviar('Atac', false, socket);
                 Enviar('Atac', true, players[0].socket);
             }
         }
     });
 
-    socket.on('SalesOk', function() {
 
+    socket.on('NomAtac', function(dades, i) {
+        var dadesTipus = "";
+        decode(dadesTipus = P.getMoveByName(dades, function(response, error) {
+            if (!error) {
+                dadesTipus = response;
+                return dadesTipus;
+            } else {
+                console.log(error)
+            }
+        }));
+        dadesTipus.then(function() {
+            socket.emit('tipusAtac', dadesTipus, i);
+            return dadesTipus;
+        });
     });
 });
 
@@ -265,14 +238,12 @@ function GetRandomPokemons(socket) {
     for (let i = 0; i < 6; i++) {
         numPokemons[i] = GetRandomPokemon(numPokemons);
     }
-    // let apiData = decode(GetApiData('https://pokeapi.co/api/v2/generation/1/'));
-    // apiData = apiData.pokemon_species;
+  
     for (let i = 0; i < numPokemons.length; i++) {
         var dadesApi = "";
         var text;
-        // let pokemonData = GetApiData(numPokemons[i]);
 
-        // console.log(text);
+
         decode(dadesApi = P.getPokemonByName(numPokemons[i], function(response, error) { // with callback
             if (!error) {
                 dadesApi = response;
@@ -285,48 +256,10 @@ function GetRandomPokemons(socket) {
             socket.emit('EnviarDades', dadesApi);
             return dadesApi;
         });
-        //console.log(dadesApi);
-        //console.log(pokemonData);
-        // if (pokemonData.types.length > 1) {
-        //     pokemons[i] = Object.create(Pokemon);
-        //     let stats = Object.create(Stats)
-        //     stats.Stats(pokemonData.stats[0].base_stat,
-        //         pokemonData.stats[1].base_stat,
-        //         pokemonData.stats[2].base_stat,
-        //         pokemonData.stats[3].base_stat,
-        //         pokemonData.stats[4].base_stat,
-        //         pokemonData.stats[5].base_stat)
-        //     pokemons[i].Pokemon(
-        //         pokemonData.name,
-        //         pokemonData.types[0],
-        //         pokemonData.types[1],
-        //         pokemonData.moves,
-        //         url,
-        //         stats.ToJson()
-        //     )
-        // } else {
-        //     pokemons[i] = Object.create(Pokemon);
-        //     let stats = Object.create(Stats)
-        //     stats.Stats(pokemonData.stats[0].base_stat,
-        //         pokemonData.stats[1].base_stat,
-        //         pokemonData.stats[2].base_stat,
-        //         pokemonData.stats[3].base_stat,
-        //         pokemonData.stats[4].base_stat,
-        //         pokemonData.stats[5].base_stat)
-        //     pokemons[i].Pokemon(
-        //         pokemonData.name,
-        //         pokemonData.types[0],
-        //         pokemonData.types[0],
-        //         pokemonData.moves,
-        //         url,
-        //         stats.ToJson()
-        //     )
-        // }
+        
     }
     pokemons_enviar = [];
-    // pokemons.forEach(pokemon => {
-    //     pokemon.P
-    // });
+
     return pokemons_enviar;
 };
 
@@ -343,37 +276,7 @@ function GetRandomPokemon(numPokemons) {
 };
 
 async function GetApiData(num) {
-    // let retorn;
-    // console.log(url);
-    // fetch(url)
-    //     .then(
-    //         function(response) {
-    //             if (response.status !== 200) {
-    //                 console.log('Looks like there was a problem. Status Code: ' +
-    //                     response.status);
-    //                 return;
-    //             }
-
-    //             // Examine the text in the response
-    //             response.json().then(function(data) {
-    //                 console.log(data);
-    //                 retorn = data;
-    //             });
-    //         }
-    //     )
-    //     .catch(function(err) {
-    //         console.log('Fetch Error :-S', err);
-    //     });
-    // console.log(retorn);
-    // return retorn;
-
-    // P.getPokemonByName('eevee') // with Promise
-    //     .then(function(response) {
-    //         console.log(response);
-    //     })
-    //     .catch(function(error) {
-    //         console.log('There was an ERROR: ', error);
-    //     });
+   
 
     P.getPokemonByName(num, function(response, error) { // with callback
         if (!error) {
@@ -383,9 +286,4 @@ async function GetApiData(num) {
         }
     });
 
-
-    // P.resource([url])
-    //     .then(function(response) {
-    //         return response; // resource function accepts singles or arrays of URLs/paths
-    //     });
 }

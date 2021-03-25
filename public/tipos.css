@@ -60,7 +60,7 @@
     border: whitesmoke 5px solid;
 }
 
-.electr {
+.electric {
     color: white;
     background-repeat: no-repeat;
     background-size: cover;
@@ -87,7 +87,7 @@
     border: whitesmoke 5px solid;
 }
 
-.fight {
+.fighting {
     color: white;
     background-repeat: no-repeat;
     background-size: cover;
@@ -105,7 +105,7 @@
     border: whitesmoke 5px solid;
 }
 
-.psiquico {
+.psychic {
     color: white;
     background-repeat: no-repeat;
     background-size: cover;
@@ -137,6 +137,15 @@
     background-repeat: no-repeat;
     background-size: cover;
     background: rgb(137, 129, 172);
+    box-shadow: 5px 5px 25px #222 inset;
+    border: whitesmoke 5px solid;
+}
+
+.unknown {
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: rgb(35, 5, 59);
     box-shadow: 5px 5px 25px #222 inset;
     border: whitesmoke 5px solid;
 }
